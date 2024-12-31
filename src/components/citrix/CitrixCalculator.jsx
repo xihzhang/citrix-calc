@@ -103,10 +103,17 @@ const CitrixCalculator = () => {
     const newSites = [...sites];
     const updatedSite = { ...newSites[index], [field]: value };
     
-    // If updating physical servers, recalculate the physical CPU
+    // If updating physical servers, handle the value properly
     if (field === 'physicalServers') {
-      updatedSite.physicalServers = parseInt(value) || 0;
-      updatedSite.physicalCPU = updatedSite.physicalServers * serverConfig.serverPhysicalCPU;
+      // Convert to string to handle input properly
+      const valueStr = value.toString();
+      
+      // Remove leading zeros but keep single zero
+      const cleanValue = valueStr.replace(/^0+(?=\d)/, '');
+      
+      // Convert back to number for calculations
+      updatedSite.physicalServers = cleanValue === '' ? '' : parseInt(cleanValue);
+      updatedSite.physicalCPU = cleanValue === '' ? 0 : updatedSite.physicalServers * serverConfig.serverPhysicalCPU;
     }
     
     newSites[index] = updatedSite;
@@ -189,7 +196,11 @@ const CitrixCalculator = () => {
         {/* Header with IRP logo */}
         <div className="flex items-center justify-between mb-8 bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center space-x-4">
-           <img src="/irp.png" alt="IRP Logo" className="w-12 h-12 object-contain" />
+            <img 
+              src="./irp.png" 
+              alt="IRP Logo" 
+              className="w-12 h-12 object-contain"
+            />
             <div>
               <h1 className="text-2xl font-bold text-gray-800">eBay IRP</h1>
               <p className="text-sm text-gray-600">Capacity & Resilience Calculator</p>

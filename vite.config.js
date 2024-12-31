@@ -6,7 +6,7 @@ import path from 'path'
 const cacheDir = process.env.VITE_CACHE_DIR || path.resolve('/tmp/vite')
 
 export default defineConfig({
-  base: 'citrix-calc',  // Replace with your actual repo name
+  base: '/citrix-calc/', 
   plugins: [react()],
   server: {
     host: true,
@@ -24,8 +24,8 @@ export default defineConfig({
   optimizeDeps: {
     cacheDir: path.join(cacheDir, 'deps')
   },
-  // Ensure temp files also go to writable location
+  // Remove the custom outDir to use default 'dist' in project root
   build: {
-    outDir: path.join(cacheDir, 'dist')
+    // outDir: path.join(cacheDir, 'dist') // Remove or comment this out
   }
 })
